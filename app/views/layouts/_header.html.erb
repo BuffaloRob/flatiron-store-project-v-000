@@ -6,7 +6,10 @@
         <% end %>
         <% if user_signed_in? %>
 					<li> <%= current_user.name %></li>
-					<li> <%= link_to  "Sign Out", destroy_user_session_path(@user) %> </li>
-					<% end %>
+					<li> <%= link_to  "Sign out", destroy_user_session_path, method: :delete %> </li>
+				<% else %>
+					<li> <%= link_to  "sign in", new_user_session_path %> </li>
+					<li> <%= link_to  "Sign up", new_user_registration_path %></li>
+				<% end %>
     </ul>
 </nav>
