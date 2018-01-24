@@ -3,10 +3,11 @@ class Item < ActiveRecord::Base
   has_many :line_items
 
   def self.available_items
-    if self.inventory >= 1
-      # binding.pry
-      self.title
-    end
+   where('inventory > ?', 0)
+  end
+
+  def remove(amount)
+    update(inventory: inventory - amount)
   end
 
 end
