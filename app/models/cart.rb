@@ -9,13 +9,28 @@ class Cart < ActiveRecord::Base
     end.sum
   end
 
-  def add_item(itemid)
-    line_item = line_items.find_by(item_id: itemid)
-    if items.ids.include?(line_item)
-      line_item.update(quantity: (line_item.quantity + 1))
+ def add_item(item_id)
+    line_item = self.line_items.find_by(item_id: item_id)
+    if line_item
+      line_item.quantity += 1
     else
-      line_items.new(item_id: itemid)
-    end   
+      line_item=self.line_items.build(item_id: item_id)
+    end
+    line_item
+  end
+
+  def checkout
+    self.status = "submitted"
+    change_inventory
+  end
+
+  def change_inventory
+    if self.status = "submitted"
+      self.line_items.each do |line_item|
+        line_item.item.inventory -= line_item.quantity
+        line_item.item.save
+      end
+    end
   end
 
 end
